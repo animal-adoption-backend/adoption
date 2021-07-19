@@ -34,6 +34,28 @@ router.post("/animals", async (req, res) => {
   }
 });
 
+//동물 좋아요
+router.put("/animals", async (req, res) => {
+  try {
+    const { userId, title, animalName, animalSpecies, animalBreed, animalAge, animalGender, animalStory, animalPhoto } = req.body;
+    // const { user } = res.locals;
+    // const userId = user.id;
+
+    await User.create({ nickname: 'hi', password: "asdf", name: 'hyunsu' })
+    // await animalList.create({ UserId: userId, title: title, animalName: animalName, animalSpecies: animalSpecies, animalBreed: animalBreed, animalAge: animalAge, animalGender: animalGender, animalStory: animalStory, animalPhoto: animalPhoto });
+    res.status(200).send({
+      "ok": true,
+      message: '동물 등록 성공',
+    });
+  } catch (error) {
+    console.error('동물 등록 에러', error);
+    res.status(400).send({
+      "ok": false,
+      message: '동물 등록 실패',
+    })
+  }
+});
+
 //모든 동물 리스트 보여주기
 router.get("/animals", async (req, res) => {
   try {
