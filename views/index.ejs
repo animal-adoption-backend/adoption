@@ -30,7 +30,7 @@
                 type: "POST",
                 url: `/api/animals`,
                 data: {
-                    userId: 1,
+                    userId: 2,
                     title: title,
                     animalName: name,
                     animalSpecies: species,
@@ -107,10 +107,43 @@
                 },
                 success: function (response) {
                     console.log("editting animalAPI successful");
-
                 },
                 error: function (error) {
                     console.log('error editing animal...');
+                    // window.alert(error.responseJSON.errorMessage);
+                }
+            })
+        };
+        function likeAnimal() {
+            let animalId = 3;
+
+            $.ajax({
+                type: "POST",
+                url: `/api/animalLike/${animalId}`,
+                data: {
+                },
+                success: function (response) {
+                    console.log("like animalAPI successful");
+                },
+                error: function (error) {
+                    console.log('error liking animal...');
+                    // window.alert(error.responseJSON.errorMessage);
+                }
+            })
+        };
+        function deleteAnimal() {
+            let animalId = 16;
+
+            $.ajax({
+                type: "DELETE",
+                url: `/api/animals/${animalId}`,
+                data: {
+                },
+                success: function (response) {
+                    console.log("delete animalAPI successful");
+                },
+                error: function (error) {
+                    console.log('error deleting animal...');
                     // window.alert(error.responseJSON.errorMessage);
                 }
             })
@@ -120,10 +153,11 @@
 </head>
 
 <body>
-
+<button onclick="likeAnimal()">like!</button>
     <h1>
         asdfasdfasdf
     </h1>
+    <button onclick="deleteAnimal()">DELETE!</button>
 
     <div>
         <div>

@@ -1,15 +1,11 @@
 const express = require("express");
 const { animalList, User, Comment } = require('../models');
 const app = express();
-
 // const Comments = require('../models/comment');
 // const { Op } = require('sequelize');
 const router = express.Router();
 // const authMiddleware = require('../middlewares/authMiddleware');
 
-
-
-//1. 테이블에서 animalId column 없애고 기본 id값으로 대체하기
 
 //동물 등록하기
 router.post("/animals", async (req, res) => {
@@ -19,7 +15,7 @@ router.post("/animals", async (req, res) => {
     // const { user } = res.locals;
     // const userId = user.id;
 
-    await User.create({ nickname: 'hi', password: "asdf", name: 'hyunsu' })
+    await User.create({ nickname: '이현수', password: "asdf", name: 'hysssu' })
     await animalList.create({ UserId: userId, title: title, animalName: animalName, animalSpecies: animalSpecies, animalBreed: animalBreed, animalAge: animalAge, animalGender: animalGender, animalStory: animalStory, animalPhoto: animalPhoto });
     res.status(200).send({
       "ok": true,
@@ -35,23 +31,34 @@ router.post("/animals", async (req, res) => {
 });
 
 //동물 좋아요
-router.put("/animals", async (req, res) => {
+router.post("/animalLike/:animalId", async (req, res) => {
   try {
-    const { userId, title, animalName, animalSpecies, animalBreed, animalAge, animalGender, animalStory, animalPhoto } = req.body;
+    const { animalId } = req.params;
+
     // const { user } = res.locals;
     // const userId = user.id;
-
-    await User.create({ nickname: 'hi', password: "asdf", name: 'hyunsu' })
-    // await animalList.create({ UserId: userId, title: title, animalName: animalName, animalSpecies: animalSpecies, animalBreed: animalBreed, animalAge: animalAge, animalGender: animalGender, animalStory: animalStory, animalPhoto: animalPhoto });
-    res.status(200).send({
-      "ok": true,
-      message: '동물 등록 성공',
+    const target = await animalList.findOne({
+      where: {
+        id: animalId
+      }
     });
-  } catch (error) {
-    console.error('동물 등록 에러', error);
+    console.log('target', target);
+    const previousLike = target.like;
+    console.log('previouslike', previousLike);
+    await target.update(
+      {
+        like: previousLike + 1
+      });
+
+    res.status(200).send({
+      'ok': true,
+      message: '동물 좋아요 성공',
+    })
+  } catch (err) {
+    console.error('동물 수정 에러 메세지: ', err);
     res.status(400).send({
-      "ok": false,
-      message: '동물 등록 실패',
+      'ok': false,
+      message: '동물 좋아요 실패',
     })
   }
 });
@@ -59,7 +66,7 @@ router.put("/animals", async (req, res) => {
 //모든 동물 리스트 보여주기
 router.get("/animals", async (req, res) => {
   try {
-    const animals = await Animals.findAll({});
+    const animals = await animalList.findAll({});
     res.status(200).send({
       'ok': true,
       result: animals,
@@ -77,11 +84,17 @@ router.get("/animals", async (req, res) => {
 router.get("/animals/:animalId", async (req, res) => {
   try {
     const { animalId } = req.params;
-    animal = await Animals.findOne({
+    animal = await animalList.findOne({
       where: {
         id: animalId
       }
     });
+    if (!animal){
+      res.status(400).send({
+        'ok': false,
+        'message': '해당 동물이 없습니다',
+      })
+    }
     res.status(200).send({
       'ok': true,
       result: animal,
@@ -100,15 +113,14 @@ router.put("/animals/:animalId", async (req, res) => {
   try {
     const { animalId } = req.params;
 
-    const { user } = res.locals;
-    const userId = user.id;
+    // const { user } = res.locals;
+    // const userId = user.id;
     const { title, animalName, animalSpecies, animalBreed, animalAge, animalGender, animalStory, animalPhoto } = req.body;
-    const target = await Animals.findOne({
+    const target = await animalList.findOne({
       where: {
         id: animalId
       }
     });
-    console.log('target', target);
 
     if (target.userId != userId) {
       res.status(400).send({
@@ -141,18 +153,34 @@ router.put("/animals/:animalId", async (req, res) => {
 
 
 
-router.post("/delete", async (req, res, next) => {
+router.delete("/animals/:animalId", async (req, res) => {
   try {
-    const { contentId, password } = req.body;
-    await Posts.deleteOne({ 'contentId': contentId, 'password': password });
-    res.send({ result: "success" });
+    const {animalId} = req.params;
+    const target = await animalList.findOne({
+      where: {
+        id: animalId
+      }
+    });
+    if (!target){
+      res.status(400).send({
+        'ok': false,
+        message: '해당 동물은 존재하지 않습니다'
+      })
+    }
+    await target.destroy();
+
+     
+    res.status(200).send({ 
+      'ok': true,
+      message: '동물 삭제 성공'
+     });
   } catch (err) {
     console.error(err);
-    next(err);
+    res.status(400).send({
+      'ok': false,
+      message: '동물 삭제 실패'
+    })
   }
-
-
-
 });
 
 
