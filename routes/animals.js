@@ -42,9 +42,14 @@ router.post("/animalLike/:animalId", async (req, res) => {
         id: animalId
       }
     });
-    console.log('target', target);
+    if(!target){
+      res.status(400).send({
+        'ok': false,
+        message: '해당 동물은 없습니다...'
+      }); 
+      return;
+    }
     const previousLike = target.like;
-    console.log('previouslike', previousLike);
     await target.update(
       {
         like: previousLike + 1
@@ -84,16 +89,17 @@ router.get("/animals", async (req, res) => {
 router.get("/animals/:animalId", async (req, res) => {
   try {
     const { animalId } = req.params;
-    animal = await animalList.findOne({
+    const animal = await animalList.findOne({
       where: {
         id: animalId
       }
     });
-    if (!animal){
+    if (!animal) {
       res.status(400).send({
         'ok': false,
         'message': '해당 동물이 없습니다',
-      })
+      });
+      return;
     }
     res.status(200).send({
       'ok': true,
@@ -155,25 +161,25 @@ router.put("/animals/:animalId", async (req, res) => {
 
 router.delete("/animals/:animalId", async (req, res) => {
   try {
-    const {animalId} = req.params;
+    const { animalId } = req.params;
     const target = await animalList.findOne({
       where: {
         id: animalId
       }
     });
-    if (!target){
+    if (!target) {
       res.status(400).send({
         'ok': false,
         message: '해당 동물은 존재하지 않습니다'
-      })
+      });
+      return;
     }
+    
     await target.destroy();
-
-     
-    res.status(200).send({ 
+    res.status(200).send({
       'ok': true,
       message: '동물 삭제 성공'
-     });
+    });
   } catch (err) {
     console.error(err);
     res.status(400).send({
@@ -182,6 +188,5 @@ router.delete("/animals/:animalId", async (req, res) => {
     })
   }
 });
-
 
 module.exports = router;
