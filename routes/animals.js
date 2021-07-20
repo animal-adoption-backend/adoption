@@ -42,11 +42,11 @@ router.post("/animalLike/:animalId", async (req, res) => {
         id: animalId
       }
     });
-    if(!target){
+    if (!target) {
       res.status(400).send({
         'ok': false,
         message: '해당 동물은 없습니다...'
-      }); 
+      });
       return;
     }
     const previousLike = target.like;
@@ -64,6 +64,43 @@ router.post("/animalLike/:animalId", async (req, res) => {
     res.status(400).send({
       'ok': false,
       message: '동물 좋아요 실패',
+    })
+  }
+});
+
+
+//상세 동물 방문횟수 
+router.post("/animalVisit/:animalId", async (req, res) => {
+  try {
+    const { animalId } = req.params;
+
+    const target = await animalList.findOne({
+      where: {
+        id: animalId
+      }
+    });
+    if (!target) {
+      res.status(400).send({
+        'ok': false,
+        message: '해당 동물은 없습니다...'
+      });
+      return;
+    }
+    const previousVisit = target.visit;
+    await target.update(
+      {
+        visit: previousVisit + 1
+      });
+
+    res.status(200).send({
+      'ok': true,
+      message: '동물 방문 성공',
+    })
+  } catch (err) {
+    console.error('동물 수정 에러 메세지: ', err);
+    res.status(400).send({
+      'ok': false,
+      message: '동물 방문 실패',
     })
   }
 });
@@ -174,7 +211,7 @@ router.delete("/animals/:animalId", async (req, res) => {
       });
       return;
     }
-    
+
     await target.destroy();
     res.status(200).send({
       'ok': true,
