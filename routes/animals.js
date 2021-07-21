@@ -6,7 +6,20 @@ const app = express();
 const router = express.Router();
 // const authMiddleware = require('../middlewares/authMiddleware');
 
+//회원가입
+router.post('/register', async (req, res) => {
+  try {
+    const { nickname, name, password } = req.body;
 
+    await User.create({ nickname: nickname, password: password, name: name })
+  } catch (error) {
+    console.log('register error!', error);
+    res.status(400).send({
+      'ok': false,
+      message: '회원가입 실패'
+    })
+  }
+})
 //동물 등록하기
 router.post("/animals", async (req, res) => {
   try {
@@ -14,7 +27,6 @@ router.post("/animals", async (req, res) => {
     // const { user } = res.locals;
     // const userId = user.id;
 
-    await User.create({ nickname: '이현수', password: "asdf", name: 'hysssu' })
     await animalList.create({ UserId: userId, title: title, animalName: animalName, animalSpecies: animalSpecies, animalBreed: animalBreed, animalAge: animalAge, animalGender: animalGender, animalStory: animalStory, animalPhoto: animalPhoto });
     res.status(200).send({
       "ok": true,
