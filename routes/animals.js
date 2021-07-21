@@ -11,7 +11,11 @@ router.post('/register', async (req, res) => {
   try {
     const { nickname, name, password } = req.body;
 
-    await User.create({ nickname: nickname, password: password, name: name })
+    await User.create({ nickname: nickname, password: password, name: name });
+    res.status(200).send({
+      'ok': true,
+      message:'회원가입 성공'
+    })
   } catch (error) {
     console.log('register error!', error);
     res.status(400).send({
