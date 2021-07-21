@@ -30,7 +30,7 @@
                 type: "POST",
                 url: `/api/animals`,
                 data: {
-                    userId: 1,
+                    userId: 2,
                     title: title,
                     animalName: name,
                     animalSpecies: species,
@@ -107,10 +107,43 @@
                 },
                 success: function (response) {
                     console.log("editting animalAPI successful");
-
                 },
                 error: function (error) {
                     console.log('error editing animal...');
+                    // window.alert(error.responseJSON.errorMessage);
+                }
+            })
+        };
+        function likeAnimal() {
+            let animalId = $('#like').val();
+
+            $.ajax({
+                type: "POST",
+                url: `/api/animalLike/${animalId}`,
+                data: {
+                },
+                success: function (response) {
+                    console.log("like animalAPI successful");
+                },
+                error: function (error) {
+                    console.log('error liking animal...');
+                    // window.alert(error.responseJSON.errorMessage);
+                }
+            })
+        };
+        function deleteAnimal() {
+            let animalId = $('#delete').val();
+
+            $.ajax({
+                type: "DELETE",
+                url: `/api/animals/${animalId}`,
+                data: {
+                },
+                success: function (response) {
+                    console.log("delete animalAPI successful");
+                },
+                error: function (error) {
+                    console.log('error deleting animal...');
                     // window.alert(error.responseJSON.errorMessage);
                 }
             })
@@ -120,10 +153,13 @@
 </head>
 
 <body>
-
+    insert animal ID here: <input id='like' type='number'>
+<button onclick="likeAnimal()">like!</button>
     <h1>
         asdfasdfasdf
     </h1>
+    insert animal ID here: <input id='delete' type='number'>
+    <button onclick="deleteAnimal()">DELETE!</button>
 
     <div>
         <div>

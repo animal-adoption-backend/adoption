@@ -54,6 +54,14 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    like: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+    },
+    // visit: {
+    //   type: Sequelize.INTEGER,
+    //   defaultValue: 0,
+    // },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE
