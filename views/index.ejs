@@ -147,13 +147,48 @@
                 }
             })
         };
+        function register() {
+            let name = $('#humanName').val();
+            let nickname = $('#nickname').val();
+            let password = $('#password').val();
 
+            $.ajax({
+                type: "POST",
+                url: `/api/register`,
+                data: {
+                    name: name,
+                    nickname: nickname,
+                    password: password,
+                },
+                success: function (response) {
+                    console.log("register API successful");
+                },
+                error: function (error) {
+                    console.log('error registering...');
+                    // window.alert(error.responseJSON.errorMessage);
+                }
+            })
+        }
     </script>
 </head>
 
 <body>
+
+    <div>
+        회원가입
+        <div>
+            닉네임: <input id="nickname" type="text">
+        </div>
+        <div>
+            이름: <input id="humanName" type="text">
+        </div>
+        <div>
+            비밀번호: <input id="password" type="password">
+        </div>
+        <button onclick="register()">회원가입</button>
+    </div>
     insert animal ID here: <input id='like' type='number'>
-<button onclick="likeAnimal()">like!</button>
+    <button onclick="likeAnimal()">like!</button>
     <h1>
         asdfasdfasdf
     </h1>
