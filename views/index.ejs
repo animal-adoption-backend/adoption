@@ -115,7 +115,7 @@
             })
         };
         function likeAnimal() {
-            let animalId = 3;
+            let animalId = $('#like').val();
 
             $.ajax({
                 type: "POST",
@@ -132,7 +132,7 @@
             })
         };
         function deleteAnimal() {
-            let animalId = 16;
+            let animalId = $('#delete').val();
 
             $.ajax({
                 type: "DELETE",
@@ -153,10 +153,12 @@
 </head>
 
 <body>
+    insert animal ID here: <input id='like' type='number'>
 <button onclick="likeAnimal()">like!</button>
     <h1>
         asdfasdfasdf
     </h1>
+    insert animal ID here: <input id='delete' type='number'>
     <button onclick="deleteAnimal()">DELETE!</button>
 
     <div>

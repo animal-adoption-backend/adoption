@@ -11,7 +11,6 @@ const router = express.Router();
 router.post("/animals", async (req, res) => {
   try {
     const { userId, title, animalName, animalSpecies, animalBreed, animalAge, animalGender, animalStory, animalPhoto } = req.body;
-    console.log('asdfasdf', userId, title, animalName, animalSpecies);
     // const { user } = res.locals;
     // const userId = user.id;
 
